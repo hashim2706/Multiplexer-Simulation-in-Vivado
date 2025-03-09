@@ -76,6 +76,9 @@ not g5(abar,a);
 not g6(bbar,b);
 or g7(Y,w1,w2,w3,w4);
 endmodule
+
+![Screenshot (107)](https://github.com/user-attachments/assets/af1da585-a963-4046-9941-ae809ea3a70b)
+
   
 
 4:1 MUX Data Flow Implementation
