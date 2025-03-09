@@ -63,49 +63,27 @@ Verilog Code
 
 4:1 MUX Gate-Level Implementation
 
-// mux4_to_1_gate.v
-module mux4_to_1_gate (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    wire not_S0, not_S1;
-    wire A_and, B_and, C_and, D_and;
-
-    // Inverters for select lines
-    not (not_S0, S0);
-    not (not_S1, S1);
-
-    // AND gates for each input with select lines
-    and (A_and, A, not_S1, not_S0);
-    and (B_and, B, not_S1, S0);
-    and (C_and, C, S1, not_S0);
-    and (D_and, D, S1, S0);
-
-    // OR gate to combine all AND gate outputs
-    or (Y, A_and, B_and, C_and, D_and);
+module mul4to1(a,b,S,Y);
+input a,b;
+input [3:0]S;
+output Y;
+wire abar,bbar,w1,w2,w3,w4;
+and g1(w1,a,bbar,S0);
+and g2(w2,a,b,S1);
+and g3(w3,abar,b,S2);
+and g4(w4,abar,bbar,S3);
+not g5(abar,a);
+not g6(bbar,b);
+or g7(Y,w1,w2,w3,w4);
 endmodule
+  
 
 4:1 MUX Data Flow Implementation
 
 // mux4_to_1_dataflow.v
-module mux4_to_1_dataflow (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    assign Y = (~S1 & ~S0 & A) |
-               (~S1 & S0 & B) |
-               (S1 & ~S0 & C) |
-               (S1 & S0 & D);
+module mux4_to_1_dataflow (a,b,s,y);
+input a,b,[3:0]s;
+    assign y=(~a & b & s0)|(a & ~b & s1) | (~a & ~b & s2) |(a & b & s3);
 endmodule
 
 4:1 MUX Behavioral Implementation
@@ -255,6 +233,9 @@ endmodule
 
 
 Sample Output
+
+![Screenshot (106)](https://github.com/user-attachments/assets/ffed8ce9-dc1f-4f20-849b-b22edb5e6713)
+
 
 Time=0 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
 Time=10 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
